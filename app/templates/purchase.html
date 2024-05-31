@@ -184,8 +184,8 @@
         </div>
     </nav>
 
-    <div class="w3-sidebar w3-bar-block w3-collapse w3-card"  id="mySidebar">
-        <a href="" class="w3-bar-item w3-button" style="font-size: medium;">Home</a>
+    <div class="w3-sidebar w3-bar-block w3-collapse w3-card" id="mySidebar">
+        <a href="{%url 'land'%}" class="w3-bar-item w3-button" style="font-size: medium;">Home</a>
         <a href="" class="w3-bar-item w3-button" style="font-size: medium;">Dashboard</a>
         <a href="" class="w3-bar-item w3-button" style="font-size: medium;">cash & Bank</a>
         <a href="#" class="w3-bar-item w3-button" style="font-size: medium;">sales</a>
@@ -201,7 +201,7 @@
                 report <span class="dropdown-icon">&#9660;</span> </button>
             <div class="nested-dropdown-container" style="background-color: transparent;">
                 <a href="#" class="w3-bar-item w3-button">Sales</a>
-                <a href="{% url 'purchase' %}" class="w3-bar-item w3-button" id="dropd">Sales by Customer</a>
+                <a href="#" class="w3-bar-item w3-button" id="dropd">Sales by Customer</a>
                 <a href="#" class="w3-bar-item w3-button">Accounts payable </a>
             </div>
             <a href="#" class="w3-bar-item w3-button">Accounts payable <span class="dropdown-icon">&#9660;</span> </a>
@@ -211,15 +211,57 @@
         <div class="container">
             <div class="row" style="justify-content: space-between;">
                 <div style="margin-top: 20px;">
-                    <h1 style="font-size: larger;color: #f1f1f1;">Dashboard</h1>
+                    <h1 style="font-size: larger;color: #f1f1f1;">Sales By Customer</h1>
                 </div>
             </div><br>
-        </div><br>
+            <div class="row">
+                <div class="col-md-8">
+                    <button style="font-weight: bold;font-size: medium;border: none;border-radius: 3px;">Customer
+                        Report</button>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <button
+                                style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 100px;margin-top: 5px;height: 30px">Customer</button>
+                        </div>
+                        <div class="col-md-3">
+                            <button
+                                style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 100px;margin-top: 5px;height: 30px">Customer</button>
+                        </div>
+                        <div class="col-md-3">
+                            <button
+                                style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 100px;margin-top: 5px;height: 30px">Customer</button>
+                        </div>
+                        <div class="col-md-3">
+                            <button
+                                style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 100px;margin-top: 5px;height: 30px">Customer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="table-responsive">
+                <table class="table  table-hover text-center table-striped">
+                    <thead style="background-color: rgb(9, 74, 83); color: aliceblue;">
+                        <tr>
+                            <th>ID</th>
+                            <th>IMAGE</th>
+                            <th>Book</th>
+                            <th>Author</th>
+                        </tr>
+                    </thead>
+                    <tbody style="background-color: rgb(28, 35, 40);">
+                        <tr style="color: aliceblue;">
+                            <td>id</td>
+                            <td>book_name</td>
+                            <td>author_nametd>
+                            <td>genere.ctgname</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div> -->
+        </div>
     </div><br>
-
-    </div>
-    </div>
-
     <footer class="footer">
         <div class="container" style="justify-content: center;align-items: center;display: flex;">
             <div class="row" style="width: 100%;">
