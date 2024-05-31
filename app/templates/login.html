@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {%load static%}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <title>Taxi Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 50px;
+            color: #333;
+        }
+
+        .booking-form {
+            margin-top: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 15px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 90%;
+            }
+
+            input[type="submit"] {
+                font-size: 16px;
+            }
+        }
+
+        @media screen and (max-width: 576px) {
+            input[type="submit"] {
+                font-size: 14px;
+            }
+        }
+
+        .footer {
+            background-color: #191919;
+            color: #fff;
+            padding: 50px 0;
+            margin-top: 375px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #242627;justify-content: center;">
+        <a class="navbar-brand" href="#" style="font-weight: bold;color: rgb(255, 255, 255);margin-left: 30PX;"><img
+                style="margin-right: 10px;" alt="" width="42px">zoho</a>
+    </nav>
+    <div class="container">
+        <!-- <center>
+      <div id="mydiv">
+        {% for message in messages %}
+        <h5>
+          <div class="alert mt-5"
+            style="width:max-content; border-radius: 20px; background-color: aliceblue;color: rgb(222, 50, 84);font-size: 1rem;">
+            {{message}}
+          </div>
+        </h5>
+        {% endfor %}
+      </div>
+    </center> -->
+        <h1 style="font-size: large; font-weight: bold;">LOG IN</h1>
+        <div class="row" style="justify-content: center;">
+            <div class="col-md-4" style="border-radius: 10px;background-color: #292a2b;">
+                <form action="{% url 'loginfun' %}" method="post"
+                    style="margin-top: 20px;margin-bottom: 20px;background-color: #292a2b;">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <!-- <label for="email">Email:</label> -->
+                        <input class="form-control" type="text" id="username" name="username" required
+                            placeholder="username">
+                    </div>
+                    <div class="form-group">
+                        <!-- <label for="email">Email:</label> -->
+                        <input class="form-control" type="password" id="password" name="password" required
+                            placeholder="password">
+                    </div>
+                    <div style="justify-content: space-around;display: flex;">
+                        <button type="submit"
+                            style=" border: none;border-radius: 10px;font-size: medium;font-weight: bold;color: #1e2021;">Log
+                            In</button>
+                        <span style="color: #fff;">New User?</span>
+                        <a style="color: #fff;text-decoration: none;" href="">Sign Up</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container" style="justify-content: center;align-items: center;display: flex;">
+            <div class="row" style="width: 100%;">
+                <div class="col-md-3">
+                    <h3 style="font-size: large;">Customer Services</h3>
+                    <span style="font-size: medium;opacity: 0.7;">FAQ</span><br>
+                    <span style="font-size: medium;opacity: 0.7;">Return & Refunds</span><br>
+                    <span style="font-size: medium;opacity: 0.7;">Terms & Conditions</span><br>
+                    <p style="font-size: medium;opacity: 0.7;">Privacy Policy</p>
+                </div>
+                <div class="col-md-3">
+                    <h3 style="font-size: large;">Community</h3>
+                    <span style="font-size: medium;opacity: 0.7;">Blog</span><br>
+                    <span style="font-size: medium;opacity: 0.7;">Community</span><br>
+                    <span style="font-size: medium;opacity: 0.7;">Ideas</span><br>
+                    <p style="font-size: medium;opacity: 0.7;">Developers</p>
+                </div>
+                <div class="col-md-3">
+                    <h3 style="font-size: large;">About</h3>
+                    <span style="font-size: medium;opacity: 0.7;">Contact</span><br>
+                    <span style="font-size: medium;opacity: 0.7;">Team</span><br>
+                    <span style="font-size: medium;opacity: 0.7;">Careers</span><br>
+                    <p style="font-size: medium;opacity: 0.7;">Services</p>
+                </div>
+                <div class="col-md-3">
+                    <h3 style="font-size: large;">Follow Us</h3>
+                    <!-- <img src="{% static 'fb.png' %}" alt="" width="45px">
+                    <img src="{% static 'y1.jpg' %}" alt="" width="45px">
+                    <img src="{% static 'i1.png' %}" alt="" width="45px"><br> -->
+                </div>
+            </div>
+    </footer>
+</body>
+<script>
+    $(document).ready(function () {
+        // Use setTimeout to delay the execution of the fadeOut function
+        setTimeout(function () {
+            $('#mydiv').fadeOut('fast');
+        }, 1200); // <-- time in milliseconds
+    });
+</script>
+
+</html>
