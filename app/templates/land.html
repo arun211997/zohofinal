@@ -88,7 +88,7 @@
         }
 
         .footer {
-            background-color: #333;
+            background-color: #191919;
             color: #fff;
             padding: 50px 0;
             margin-top: 200px;
@@ -130,11 +130,39 @@
             z-index: 9999;
             /* Ensure it appears above other elements */
         }
+
+        .w3-sidebar .dropdown-btn {
+            font-size: medium;
+            border: none;
+            outline: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            display: block;
+            text-align: left;
+            width: 100%;
+            margin-left: 15px;
+            margin-top: 8px;
+            transition: 0.3s;
+        }
+
+        .w3-sidebar .dropdown-container {
+            display: none;
+            background-color: #f9f9f9;
+            padding-left: 15px;
+        }
+
+        .w3-sidebar .dropdown-container a {
+            font-size: small;
+        }
+        .dropdown-icon{
+            font-size: small;
+        }
     </style>
 </head>
 
 <body style="background-color:rgb(245, 240, 251);">
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color:rgb(39, 6, 67); ">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color:rgb(27, 25, 29); ">
         <a class="navbar-brand" href="#" style="font-weight:bold;color: rgb(245, 247, 249);margin-left: 30PX;">zoho</a>
         <span class="navbar-toggler-icon" onclick="w3_open()" id="openNav"
             style="margin-right: 30px;background-color: rgb(245, 247, 249);"></span>
@@ -163,9 +191,21 @@
         <a href="#" class="w3-bar-item w3-button" style="font-size: medium;">Purchase</a>
         <a href="#" class="w3-bar-item w3-button" style="font-size: medium;">Time Tracking</a>
         <a href="#" class="w3-bar-item w3-button" style="font-size: medium;">Accounts</a>
-        <a href="#" class="w3-bar-item w3-button" style="font-size: medium;">Pay roll</a>
+        <button class="w3-bar-item w3-button dropdown-btn" style="font-size: medium;color: #f1f1f1;">Payroll <span class="dropdown-icon">&#9660;</span> </button>
+        <div class="dropdown-container" style="background-color: transparent;">
+            <a href="#"  class="w3-bar-item w3-button">Sales</a>
+            <a href="#" class="w3-bar-item w3-button">Stock report</a>
+            <a href="#" class="w3-bar-item w3-button">Accounts payable</a>
+        </div>
+        <!-- <a href="#" class=" dropdown-toggle" style="font-size: medium;" data-toggle="dropdown">Dishes</a>
+        <div class="dropdown-menu" style="background-color: transparent;">
+            <a href="" style="font-size: medium;" class="dropdown-item"></a>
+            <a href="" style="font-size: medium;" class="dropdown-item">Non-veg</a>
+            <a href="" style="font-size: medium;" class="dropdown-item">Ice Creamss</a>
+        </div> -->
     </div>
-    <div class="container" style="margin-top: 96px;background-color:rgb(37, 20, 62); border-radius: 20px;height: 400px;">
+    <div class="container"
+        style="margin-top: 96px;background-color:rgb(27, 26, 29);height: 400px;">
         <div class="container">
             <div class="row" style="justify-content: space-between;">
                 <div style="margin-top: 20px;">
@@ -519,41 +559,18 @@
     }
 </script>
 <script>
-    const xValues = ["JAN", "FEB", "MAR", "APR", "MAY", "JUNE", "JULY", "AUG", "SEP", "OCT"];
-    const yValues = [10000, 8500, 6750, 8000, 8000, 9000, 8000, 8000, 7500, 10000];
-
-    const barColors = "rgb(137, 67, 235)";
-    const Colors = "rgb(137, 67, 235)";
-
-    const sepIndex = xValues.indexOf("SEP");
-    const octIndex = xValues.indexOf("OCT");
-
-    // Get the sales values for October and November
-    const sepValue = yValues[sepIndex];
-    const octValue = yValues[octIndex];
-
-    // Calculate the growth percentage
-    const growthPercentage = ((octValue - sepValue) / sepValue) * 100;
-    growp = document.getElementById("growth")
-    growp.innerText = growthPercentage.toFixed(2) + "%";
-
-    new Chart("myChart", {
-        type: "bar",
-        data: {
-            labels: xValues,
-            datasets: [{
-                backgroundColor: barColors,
-                data: yValues,
-                // color: Colors.
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            legend: { display: false },
-            title: {
-                display: true,
-                text: " Sales 2024"
-            }
+    document.addEventListener("DOMContentLoaded", function () {
+        var dropdown = document.getElementsByClassName("dropdown-btn");
+        for (var i = 0; i < dropdown.length; i++) {
+            dropdown[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var dropdownContent = this.nextElementSibling;
+                if (dropdownContent.style.display === "block") {
+                    dropdownContent.style.display = "none";
+                } else {
+                    dropdownContent.style.display = "block";
+                }
+            });
         }
     });
 </script>
