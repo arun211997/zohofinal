@@ -1,3 +1,11 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+user= get_user_model ()
 
-# Create your models here.
+class cpurchase(models.Model):
+    user=models.ForeignKey(user,on_delete=models.CASCADE,null=True)
+    date=models.TextField(null=True)
+    duedate=models.TextField(null=True)
+    orderno=models.TextField(null=True)
+    cname=models.TextField(null=True)
+    total=models.TextField(null=True)
