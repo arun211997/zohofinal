@@ -9,3 +9,7 @@ class cpurchase(models.Model):
     orderno=models.TextField(null=True)
     cname=models.TextField(null=True)
     total=models.TextField(null=True)
+
+class userdata(models.Model):
+    user=models.ForeignKey(user,on_delete=models.CASCADE,null=True)
+    vendor=models.TextField(max_length=255)
