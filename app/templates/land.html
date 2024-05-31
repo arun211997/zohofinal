@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {%load static%}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <title>zoho</title>
+    <style>
+        .navbar {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 3000;
+        }
+
+        ul a {
+            color: aliceblue;
+            text-decoration: none;
+        }
+
+        ul a:hover {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .openbtn {
+            color: rgb(34, 37, 39);
+            font-weight: bold;
+            font-size: 1rem;
+            outline: none;
+            border: none;
+            background-color: transparent;
+            margin-left: 5px;
+        }
+
+        .w3-sidebar {
+            height: 100%;
+            width: 200px;
+            position: fixed;
+            z-index: 2500;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            padding-top: 60px;
+            display: none;
+            transition: width 0.01s;
+            /* Initially hidden */
+        }
+
+        .w3-sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #fff;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .w3-sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        @media (max-width: 768px) {
+            .w3-sidebar {
+                width: 150px;
+            }
+
+            #main {
+                margin-left: 150px;
+            }
+
+            #navbar {
+                margin-left: 15%;
+            }
+        }
+
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 50px 0;
+            margin-top: 200px;
+        }
+
+        .card {
+            transition: transform 0.1s ease-in-out;
+            /* Adding transition effect */
+            opacity: 1;
+            /* Initial opacity */
+        }
+
+        .card.dragging {
+            transform: scale(1);
+            opacity: 0;
+        }
+
+        .highlight {
+            background-color: blueviolet;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .popup-dropzone {
+            position: fixed;
+            top: 100px;
+            left: 35%;
+            width: 600px;
+            height: 70px;
+            background-color: rgb(233, 220, 240);
+            /* Semi-transparent background */
+            display: none;
+            /* Initially hidden */
+            z-index: 9999;
+            /* Ensure it appears above other elements */
+        }
+    </style>
+</head>
+
+<body style="background-color:rgb(245, 240, 251);">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color:rgb(39, 6, 67); ">
+        <a class="navbar-brand" href="#" style="font-weight:bold;color: rgb(245, 247, 249);margin-left: 30PX;">zoho</a>
+        <span class="navbar-toggler-icon" onclick="w3_open()" id="openNav"
+            style="margin-right: 30px;background-color: rgb(245, 247, 249);"></span>
+        <span class="navbar-toggler-icon" onclick="w3_close()" id="closeNav"
+            style="display: none;margin-right: 30px;background-color: rgb(245, 247, 249);"></span>
+        <div class="collapse navbar-collapse" id="navbarNav" style="justify-content: right;align-items: center;">
+            <div style="width: 50%;align-items: baseline;;">
+                <ul class="navbar-nav ml-auto" style="justify-content: right;align-items: baseline;">
+                    <li class="nav-item">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <a class="nav-link"
+                            style="color: rgb(245, 247, 249);font-weight: bold; font-size: medium; outline: none; border: none;margin-left: 5px;"
+                            id="log" type="button" class="btn" data-toggle="modal" data-target="#signupmodal">Sign
+                            In</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="w3-sidebar w3-bar-block w3-collapse w3-card" style="width:200px;" id="mySidebar">
+        <a href="" class="w3-bar-item w3-button" style="font-size: medium;">Home</a>
+        <a href="" class="w3-bar-item w3-button" style="font-size: medium;">Dashboard</a>
+        <a href="" class="w3-bar-item w3-button" style="font-size: medium;">cash & Bank</a>
+        <a href="#" class="w3-bar-item w3-button" style="font-size: medium;">sales</a>
+        <a href="#" class="w3-bar-item w3-button" style="font-size: medium;">Purchase</a>
+        <a href="#" class="w3-bar-item w3-button" style="font-size: medium;">Time Tracking</a>
+        <a href="#" class="w3-bar-item w3-button" style="font-size: medium;">Accounts</a>
+        <a href="#" class="w3-bar-item w3-button" style="font-size: medium;">Pay roll</a>
+    </div>
+    <div class="container" style="margin-top: 96px;background-color:rgb(37, 20, 62); border-radius: 20px;height: 400px;">
+        <div class="container">
+            <div class="row" style="justify-content: space-between;">
+                <div style="margin-top: 20px;">
+                    <h1 style="font-size: larger;color: #f1f1f1;">Dashboard</h1>
+                </div>
+            </div><br>
+        </div><br>
+    </div><br>
+
+    <!-- <div class="container">
+        <div class="row"
+            style="justify-content: space-around;background-color: rgb(35, 6, 62);margin-top: 20px;border-radius: 20px;">
+            <div class="col-md-3" style=" margin-bottom: 10px;margin-top: 20px;">
+                <div class="row-3" style="justify-content: center;margin-top: 10px;">
+                    <div class="card" style="background-color: rgb(88, 35, 138);height: 10px;border-radius: unset;">
+                    </div>
+                    <div class="card"
+                        style="height: 70px;justify-content: center;border-radius: unset;background-color: #ffffff;">
+                        <span style="font-weight: bold;margin-left: 30px;">New Deals</span>
+                    </div>
+                </div>
+                <div class="row" id="messageContainer" style="margin-bottom: 10px;">
+                </div>
+            </div>
+            <div class="col-md-8" style="border-radius: 20px;">
+                <div class="row" style="margin-top: 20px;margin-bottom: 20px;">
+                    <h4 style="color: #f1f1f1;font-size: medium;font-weight: bold;">New Clients</h4>
+                    <div class="col-md-4">
+                        <div class="card"
+                            style="background-color: rgb(56, 16, 94);color: #f1f1f1;justify-content: center;display: flex;align-items: center;margin-top: 20px;margin-bottom: 20px;border-radius: 20px;">
+                            <img src="/static/m1.jpg/" alt="" style="width: 105PX;border-radius: 50%;margin-top: 15px;">
+                            <span style="margin-top: 10px; font-size: medium;font-weight: 700;">Client 1</span><br>
+                            <div
+                                style="background-color:rgb(74, 15, 124);width: 100%;justify-content: center;display: flex;flex-direction: column;align-items: center;">
+                                <span style="font-size: small;color: rgb(207, 187, 227)">client Id : <span
+                                        style="color: rgb(247, 245, 250);font-size: medium;margin-left: 5px;font-weight: bold;">
+                                        CL101</span></span>
+                                <span style="font-size: small;color: rgb(207, 187, 227)">email : <span
+                                        style="color: rgb(247, 245, 250);font-size: medium;margin-left: 5px;font-weight: bold;">
+                                        client@gmail.com</span></span>
+                            </div><br>
+                            <button
+                                style="background-color: #f1f1f1;width: 150px;border-radius: 20px;font-weight: bold;margin-bottom: 15px;">View
+                                Details</button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card"
+                            style="background-color: rgb(56, 16, 94);color: #f1f1f1;justify-content: center;display: flex;align-items: center;margin-top: 20px;margin-bottom: 20px;border-radius: 20px;">
+                            <img src="/static/m1.jpg/" alt="" style="width: 105PX;border-radius: 50%;margin-top: 15px;">
+                            <span style="margin-top: 10px; font-size: medium;font-weight: 700;">Client 1</span><br>
+                            <div
+                                style="background-color:rgb(74, 15, 124);width: 100%;justify-content: center;display: flex;flex-direction: column;align-items: center;">
+                                <span style="font-size: small;color: rgb(207, 187, 227)">client Id : <span
+                                        style="color: rgb(247, 245, 250);font-size: medium;margin-left: 5px;font-weight: bold;">
+                                        CL101</span></span>
+                                <span style="font-size: small;color: rgb(207, 187, 227)">email : <span
+                                        style="color: rgb(247, 245, 250);font-size: medium;margin-left: 5px;font-weight: bold;">
+                                        client@gmail.com</span></span>
+                            </div><br>
+                            <button
+                                style="background-color: #f1f1f1;width: 150px;border-radius: 20px;font-weight: bold;margin-bottom: 15px;">View
+                                Details</button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card"
+                            style="background-color: rgb(56, 16, 94);color: #f1f1f1;justify-content: center;display: flex;align-items: center;margin-top: 20px;margin-bottom: 20px;border-radius: 20px;">
+                            <img src="/static/m1.jpg/" alt="" style="width: 105PX;border-radius: 50%;margin-top: 15px;">
+                            <span style="margin-top: 10px; font-size: medium;font-weight: 700;">Client 1</span><br>
+                            <div
+                                style="background-color:rgb(74, 15, 124);width: 100%;justify-content: center;display: flex;flex-direction: column;align-items: center;">
+                                <span style="font-size: small;color: rgb(207, 187, 227)">client Id : <span
+                                        style="color: rgb(247, 245, 250);font-size: medium;margin-left: 5px;font-weight: bold;">
+                                        CL101</span></span>
+                                <span style="font-size: small;color: rgb(207, 187, 227)">email : <span
+                                        style="color: rgb(247, 245, 250);font-size: medium;margin-left: 5px;font-weight: bold;">
+                                        client@gmail.com</span></span>
+                            </div><br>
+                            <button
+                                style="background-color: #f1f1f1;width: 150px;border-radius: 20px;font-weight: bold;margin-bottom: 15px;">View
+                                Details</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px;margin-bottom: 20px;">
+                    <h4 style="color: #f1f1f1;font-size: medium;font-weight: bold;">New Clients</h4>
+                    <div class="col-md-4">
+                        <div class="card"
+                            style="background-color: rgb(56, 16, 94);color: #f1f1f1;justify-content: center;display: flex;align-items: center;margin-top: 20px;margin-bottom: 20px;border-radius: 20px;">
+                            <img src="/static/m1.jpg/" alt="" style="width: 105PX;border-radius: 50%;margin-top: 15px;">
+                            <span style="margin-top: 10px; font-size: medium;font-weight: 700;">Client 1</span><br>
+                            <div
+                                style="background-color:rgb(74, 15, 124);width: 100%;justify-content: center;display: flex;flex-direction: column;align-items: center;">
+                                <span style="font-size: small;color: rgb(207, 187, 227)">client Id : <span
+                                        style="color: rgb(247, 245, 250);font-size: medium;margin-left: 5px;font-weight: bold;">
+                                        CL101</span></span>
+                                <span style="font-size: small;color: rgb(207, 187, 227)">email : <span
+                                        style="color: rgb(255, 255, 255);font-size: medium;margin-left: 5px;font-weight: bold;">
+                                        client@gmail.com</span></span>
+                            </div><br>
+                            <button
+                                style="background-color: #f1f1f1;width: 150px;border-radius: 20px;font-weight: bold;margin-bottom: 15px;">View
+                                Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div><br> -->
+    <div id="popupDropzone" class="popup-dropzone" style="justify-content: center;align-items: center;position: fixed;">
+        <h5 class="text-center" style="font-weight: bold;font-size: large;color: rgb(46, 8, 46);margin-top: 20px;">Add
+            to Archieve
+        </h5>
+    </div>
+    </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container" style="justify-content: center;align-items: center;display: flex;">
+            <div class="row" style="width: 100%;">
+                <div class="col-md-3">
+                    <h3 style="font-size: large;">Customer Services</h3>
+                    <span style="font-size: medium;opacity: 0.7;">FAQ</span><br>
+                    <span style="font-size: medium;opacity: 0.7;">Return & Refunds</span><br>
+                    <span style="font-size: medium;opacity: 0.7;">Terms & Conditions</span><br>
+                    <p style="font-size: medium;opacity: 0.7;">Privacy Policy</p>
+                </div>
+                <div class="col-md-3">
+                    <h3 style="font-size: large;">Community</h3>
+                    <span style="font-size: medium;opacity: 0.7;">Blog</span><br>
+                    <span style="font-size: medium;opacity: 0.7;">Community</span><br>
+                    <span style="font-size: medium;opacity: 0.7;">Ideas</span><br>
+                    <p style="font-size: medium;opacity: 0.7;">Developers</p>
+                </div>
+                <div class="col-md-3">
+                    <h3 style="font-size: large;">About</h3>
+                    <span style="font-size: medium;opacity: 0.7;">Contact</span><br>
+                    <span style="font-size: medium;opacity: 0.7;">Team</span><br>
+                    <span style="font-size: medium;opacity: 0.7;">Careers</span><br>
+                    <p style="font-size: medium;opacity: 0.7;">Services</p>
+                </div>
+                <div class="col-md-3">
+                    <h3 style="font-size: large;">Follow Us</h3>
+                    <!-- <img src="{% static 'fb.png' %}" alt="" width="45px">
+                    <img src="{% static 'y1.jpg' %}" alt="" width="45px">
+                    <img src="{% static 'i1.png' %}" alt="" width="45px"><br> -->
+                </div>
+            </div>
+    </footer>
+</body>
+
+<script>
+    var data = [
+        {
+            id: "1",
+            name: "100 Widgets",
+            message: "Blue Rivers pvt",
+            Image: "/static/c1.png"
+
+        }, {
+            id: "2",
+            name: "Instance Software",
+            message: "Brailounge",
+            Image: "/static/c1.png"
+        }, {
+            id: "3",
+            message: "Skillbox",
+            name: "Skillbox ltd",
+            Image: "/static/c1.png"
+
+
+        }, {
+            id: "4",
+            message: "Instawidgets",
+            name: "Photofeed",
+            Image: "/static/c1.png"
+
+        },
+        {
+            id: "5",
+            message: "vu Widget Deal",
+            name: "Innotype",
+            Image: "/static/c1.png"
+
+        },
+    ];
+
+    var archiveMessages = [];
+
+    // Function to check if a message is archived
+    function isMessageArchived(messageId) {
+        var archivedMessages = JSON.parse(localStorage.getItem('ArchiveMessages')) || [];
+        return archivedMessages.some(msg => msg.id === messageId);
+    }
+
+    function showDropzone() {
+        var dropZone = document.getElementById("popupDropzone");
+        dropZone.style.display = "block";
+    }
+
+
+
+
+    function allowDrop(event) {
+        event.preventDefault(); // Prevent default behavior to allow drop
+    }
+
+    var dropZone = document.getElementById("popupDropzone");
+    dropZone.addEventListener('dragover', allowDrop);
+
+    function populateMessages() {
+        var messageContainer = document.getElementById("messageContainer");
+        data.forEach((item) => {
+            // Check if the message is not archived
+            if (!isMessageArchived(item.id)) {
+                var messageDivcol = document.createElement("div");
+                messageDivcol.className = "con";
+                var messageDiv = document.createElement("div");
+                messageDiv.className = "card";
+                messageDiv.id = "message" + item.id;
+                messageDiv.draggable = "true";
+                messageDiv.style.border = "0.5px solid rgba(0, 0, 0, 0.5)";
+                messageDiv.style.borderLeft = "0";
+                messageDiv.style.borderRight = "0";
+                messageDiv.style.borderBottom = "0";
+                messageDiv.style.justifyContent = "center";
+                messageDiv.style.alignItems = "left";
+                messageDiv.style.borderRadius = "unset";
+                messageDiv.style.backgroundColor = "rgb(56, 16, 94)";
+                messageDiv.style.color = "rgb(255, 255, 255)";
+                messageDiv.addEventListener('dragstart', function (event) {
+                    showDropzone();
+                    setTimeout(function () {
+                        setopacity();
+                    }, 0);
+                    event.dataTransfer.setData('text/plain', item.id);
+                });
+                messageDiv.addEventListener('dragend', handleDragEnd);
+                function handleDragEnd() {
+                    var dropZone = document.getElementById("popupDropzone");
+                    dropZone.style.display = "none";
+                    messageDiv.style.opacity = "0.9";
+                }
+                function setopacity() {
+                    messageDiv.style.opacity = "0";
+                }
+
+                var messageDivbody = document.createElement("div");
+                messageDivbody.className = "card-body";
+                messageDivbody.id = "messagebody" + item.id;
+
+                var img = document.createElement("img");
+                img.src = item.Image;
+                img.width = 20;
+                img.alt = "";
+
+                var Name = document.createElement("h5");
+                Name.textContent = item.name;
+                Name.className = "name";
+
+                var label = document.createElement("p");
+                label.textContent = item.message;
+                label.className = "message-name";
+
+                messageDivbody.appendChild(img);
+                messageDivbody.appendChild(Name);
+                messageDivbody.appendChild(label);
+                messageDiv.appendChild(messageDivbody);
+                messageDivcol.appendChild(messageDiv);
+                messageContainer.appendChild(messageDivcol);
+                // Add drop event listener to this messageDiv
+                dropZone.addEventListener('drop', function (event) {
+                    event.preventDefault();
+                    const cardId = event.dataTransfer.getData('text/plain');
+                    if (cardId === item.id) {
+                        // Archive only if the dropped card matches this item
+                        archiveMessage(cardId);
+                        // Optionally, remove the message from the UI
+                        messageDiv.remove();
+                    }
+                });
+            }
+        });
+    }
+
+    window.onload = populateMessages;
+
+    function archiveMessage(messageId) {
+        var archiveMessagesData = JSON.parse(localStorage.getItem('ArchiveMessages'));
+        var msg = data.find((msg) => msg.id === messageId);
+        if (archiveMessagesData.length == 0) {
+            if (msg) {
+                var obj = {
+                    "id": msg.id,
+                    "message": msg.message,
+                    "image": msg.Image,
+                    "name": msg.name,
+
+                };
+                archiveMessages.push(obj);
+                localStorage.setItem('ArchiveMessages', JSON.stringify(archiveMessages));
+            } else {
+                console.log("Message with ID", messageId, "not found.");
+            }
+        }
+        else {
+            var obj = {
+                "id": msg.id,
+                "message": msg.message,
+                "image": msg.Image,
+                "name": msg.name,
+
+            };
+            archiveMessagesData.push(obj)
+            localStorage.setItem('ArchiveMessages', JSON.stringify(archiveMessagesData));
+        }
+    }
+</script>
+
+<script>
+    function w3_open() {
+        var screenWidth = window.innerWidth;
+        if (screenWidth < 768) {
+            document.getElementById("openNav").style.display = "none";
+            document.getElementById("closeNav").style.display = "block";
+            document.getElementById("mySidebar").style.width = "150px";
+            document.getElementById("mySidebar").style.marginTop = "50px";
+            document.getElementById("mySidebar").style.display = "block";
+        }
+        if (screenWidth > 768) {
+            document.getElementById("openNav").style.display = "none";
+            document.getElementById("closeNav").style.display = "block";
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("mySidebar").style.marginTop = "50px";
+            document.getElementById("mySidebar").style.display = "block";
+        }
+        if (screenWidth == 768) {
+            document.getElementById("openNav").style.display = "none";
+            document.getElementById("closeNav").style.display = "block";
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("mySidebar").style.marginTop = "50px";
+            document.getElementById("mySidebar").style.display = "block";
+        }
+    }
+    function w3_close() {
+        document.getElementById("openNav").style.display = "block";
+        document.getElementById("closeNav").style.display = "none";
+        document.getElementById("mySidebar").style.display = "none";
+    }
+</script>
+<script>
+    const xValues = ["JAN", "FEB", "MAR", "APR", "MAY", "JUNE", "JULY", "AUG", "SEP", "OCT"];
+    const yValues = [10000, 8500, 6750, 8000, 8000, 9000, 8000, 8000, 7500, 10000];
+
+    const barColors = "rgb(137, 67, 235)";
+    const Colors = "rgb(137, 67, 235)";
+
+    const sepIndex = xValues.indexOf("SEP");
+    const octIndex = xValues.indexOf("OCT");
+
+    // Get the sales values for October and November
+    const sepValue = yValues[sepIndex];
+    const octValue = yValues[octIndex];
+
+    // Calculate the growth percentage
+    const growthPercentage = ((octValue - sepValue) / sepValue) * 100;
+    growp = document.getElementById("growth")
+    growp.innerText = growthPercentage.toFixed(2) + "%";
+
+    new Chart("myChart", {
+        type: "bar",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValues,
+                // color: Colors.
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            legend: { display: false },
+            title: {
+                display: true,
+                text: " Sales 2024"
+            }
+        }
+    });
+</script>
+
+</html>
