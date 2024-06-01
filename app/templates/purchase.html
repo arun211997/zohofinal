@@ -16,6 +16,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.0/html2pdf.bundle.min.js"></script>
     <title>zoho</title>
     <style>
         .navbar {
@@ -221,75 +225,84 @@
                 <div class="col-md-4">
                     <div class="row">
                         <div class="col-md-3">
-                            <button
-                                style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 100px;margin-top: 5px;height: 30px">Pdf</button>
+                            <button id="download"
+                                style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 80px;margin-top: 5px;height: 30px">Pdf</button>
                         </div>
                         <div class="col-md-3">
                             <button
-                                style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 100px;margin-top: 5px;height: 30px">Print</button>
+                                style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 80px;margin-top: 5px;height: 30px">Print</button>
                         </div>
                         <div class="col-md-3">
                             <button
-                                style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 100px;margin-top: 5px;height: 30px">Export</button>
+                                style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 80px;margin-top: 5px;height: 30px">Export</button>
                         </div>
                         <div class="col-md-3">
                             <button
-                                style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 100px;margin-top: 5px;height: 30px">Share</button>
+                                style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 80px;margin-top: 5px;height: 30px">Share</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div><br>
-        <div class="row" style="background-color: rgb(0, 102, 255);margin-left: 0.4px;margin-right: 0.4px;">
-            <h4 class="text-center" style="color: #e9e9e9;margin-top: 20px;margin-bottom: -5px;font-size: medium;">AR
-                venture</h4>
-            <div class="col-md-12"
-                style="justify-content: center;display: flex;color: #ffffff;border-style: solid; align-items: center; font-size: x-large; font-weight: 600;  border-left: 0;border-right: 0;border-top: 0;border-width: 0.1px;height: 45px;border-color: rgb(20, 23, 22, 0.2);">
-                Sales By customer</div>
-        </div>
-        <div class="table-responsive">
-            <table class="table  table-hover text-center table-striped">
-                <thead style="background-color: rgb(9, 74, 83); color: aliceblue;">
-                    <tr>
-                        <th>
-                            DATE
-                        </th>
-                        <th>
-                            <center>
-                                <div style="width: max-content;">
-                                    DUE DATE
-                                </div>
-                            </center>
-                        </th>
-                        <th>
-                            <center>
-                                <div style="width: max-content;">
-                                    PURCHASE ORDER NUMBER
-                                </div>
-                            </center>
-                        </th>
-                        <th>CUSTOMERNAME</th>
-                        <th>
-                            <center>
-                                <div style="width: max-content;">
-                                    TOTAL AMOUNT
-                                </div>
-                            </center>
-                        </th>
-                    </tr>
-                </thead>
-                {%for p in purchase%}
-                <tbody style="background-color: rgb(28, 35, 40);">
-                    <tr style="color: aliceblue;">
-                        <td>{{p.date}}</td>
-                        <td>{{p.duedate}}</td>
-                        <td>{{p.order}}</td>
-                        <td>{{p.user.first_name}}</td>
-                        <td>{{p.total}}</td>
-                    </tr>
-                </tbody>
-                {%endfor%}
-            </table>
+        <div class="container" id="bill">
+            <div class="row" style="background-color: rgb(0, 102, 255);margin-left: 0.4px;margin-right: 0.4px;">
+                <h4 class="text-center" style="color: #e9e9e9;margin-top: 20px;margin-bottom: -5px;font-size: medium;">
+                    zoho</h4>
+                <div class="col-md-12"
+                    style="justify-content: center;display: flex;color: #ffffff;border-style: solid; align-items: center; font-size: x-large; font-weight: 600;  border-left: 0;border-right: 0;border-top: 0;border-width: 0.1px;height: 45px;border-color: rgb(20, 23, 22, 0.2);">
+                    Sales By customer</div>
+            </div>
+            <div class="table-responsive">
+                <table class="table  table-hover text-center table-striped">
+                    <thead style="background-color: rgb(9, 74, 83); color: aliceblue;">
+                        <tr>
+                            <th>
+                                DATE
+                            </th>
+                            <th>
+                                <center>
+                                    <div style="width: max-content;">
+                                        VENDORNAME
+                                    </div>
+                                </center>
+                            </th>
+                            <th>
+                                <center>
+                                    <div style="width: max-content;">
+                                        PURCHASE ORDER NUMBER
+                                    </div>
+                                </center>
+                            </th>
+                            <th>CUSTOMERNAME</th>
+                            <th>
+                                <center>
+                                    <div style="width: max-content;">
+                                        TOTAL AMOUNT
+                                    </div>
+                                </center>
+                            </th>
+                        </tr>
+                    </thead>
+                    {%for p in purchase%}
+                    <tbody style="background-color: rgb(28, 35, 40);">
+                        <tr style="color: aliceblue;">
+
+                            <td>
+                                <center>
+                                    <div style="width: max-content;">
+                                        {{p.date}}
+                                    </div>
+                                </center>
+                            </td>
+                            <td>{{p.vendor}}</td>
+                            <td>{{p.order}}</td>
+                            <td>{{p.user.first_name}}</td>
+                            <td>₹ {{p.total}}</td>
+                        </tr>
+                    </tbody>
+                    {%endfor%}
+                </table>
+            </div>
         </div>
         <!-- <div class="row"
             style="color: #151414;background-color: rgb(235, 230, 239);margin-left: 3px;margin-right: 3px;padding-top: 10px;">
@@ -449,6 +462,50 @@
         }
 
     });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("download").addEventListener("click", function () {
+            // var screenWidth = window.innerWidth;
+            // if (screenWidth > 768) {
+            //     console.log("large")
+            generatebillPDF();
+            // }
+            // if (screenWidth < 768) {
+            //     console.log("small")
+            //     generatePDF();
+            // }
+        });
+        // function generatePDF() {
+        //     const invoice = document.getElementById("billpdf");
+        //     invoice.style.display = "block";
+        //     var opt = {
+        //         margin: 0.5,
+        //         filename: 'bill.pdf',
+        //         image: { type: 'jpeg', quality: 2 },
+        //         html2canvas: { scale: 2 },
+        //         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        //     };
+
+        //     html2pdf().from(invoice).set(opt).save().then(function () {
+        //         // Hide the invoice element after PDF is generated and saved
+        //         invoice.style.display = "none";
+        //     });
+        // }
+        function generatebillPDF() {
+            const invoice = document.getElementById("bill");
+            var opt = {
+                margin: 0.5,
+                filename: 'bill.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+            };
+            html2pdf().from(invoice).set(opt).save().then(function () {
+            });
+        }
+    });
+    window.onload = billtotal;
 </script>
 
 
