@@ -204,5 +204,44 @@
         }, 1200); // <-- time in milliseconds
     });
 </script>
+<script>
+    function validatepass() {
+      var newp = document.getElementById('password').value;
+      var confirmPass = document.getElementById('cpassword').value;
+      var phone = document.getElementById('phone').value;
+      var password = document.getElementById('password').value;
+      document.getElementById('phoneError').innerHTML = ""
+      document.getElementById('passwordError').innerHTML = ""
+     
+    //   if (password.length < 8) {
+    //     document.getElementById('passwordError').innerHTML= 'Password must be at least 8 characters long';
+    //     return false;
+    //   }
+  
+    //   if (!/[A-Z]/.test(password)) {
+    //     document.getElementById('passwordError').innerHTML = 'Password must contain at least one uppercase letter';
+    //     return false;
+    //   }
+  
+    //   if (!/[a-z]/.test(password)) {
+    //     document.getElementById('passwordError').innerHTML = 'Password must contain at least one lowercase letter';
+    //     return false;
+    //   }
+  
+    //   if (!/\d/.test(password)) {
+    //     document.getElementById('passwordError').innerHTML = 'Password must contain at least one number';
+    //     return false;
+    //   }
+  
+    //   if (!/[!@#$%^&*()_+{}\[\]:;<>,.?~\-]/.test(password)) {
+    //     document.getElementById('passwordError').innerHTML = 'Password must contain at least one special character';
+    //     return false;
+    //   }
+  
+     
+    
+      return true;
+    }
+  </script>
 
 </html>

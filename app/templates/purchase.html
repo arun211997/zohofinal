@@ -229,7 +229,7 @@
                                 style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 80px;margin-top: 5px;height: 30px">Pdf</button>
                         </div>
                         <div class="col-md-3">
-                            <button
+                            <button id="print"
                                 style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 80px;margin-top: 5px;height: 30px">Print</button>
                         </div>
                         <div class="col-md-3">
@@ -506,6 +506,19 @@
         }
     });
     window.onload = billtotal;
+</script>
+
+<script>
+    document.getElementById("print").addEventListener("click", function () {
+        printContainer();
+    });
+    function printContainer() {
+        var printContents = document.getElementById('bill').innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
 </script>
 
 
