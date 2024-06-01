@@ -2,13 +2,20 @@ from django.shortcuts import render
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
-from app.models import userdata
+from app.models import userdata, orderno, cpurchase
 
 def land(request):
     return render(request,"land.html")
 
 def purchase(request):
-    return render(request,"purchase.html")
+    purchase=cpurchase.objects.all()
+    return render(request,"purchase.html",{'purchase':purchase})
+
+def customer(request):
+    user=request.session['uid']
+    print(user)
+    order=orderno.objects.get(user_id=user)
+    return render(request,"customer.html",{'order':order})
 
 def loginpage(request):
     return render(request,"login.html")
@@ -16,17 +23,17 @@ def loginpage(request):
 def signup(request):
     return render(request,"signup.html")
 
-def signupfunct(request):
+def signupfun(request):
      if request.method == "POST":
         first_name = request.POST["name"]
-        username = request.POST['uname']
+        username = request.POST["username"]
         mail=request.POST["mail"]
         password=request.POST["password"]
         vendor=request.POST["vendor"]
         if User.objects.filter(username=username).exists():
             messages.info(request, "This username is already taken")
             return render(request , "signup.html")
-        if User.objects.filter(mail=mail).exists():
+        if User.objects.filter(email=mail).exists():
             messages.info(request, "This mail is already taken")
             return render(request,"signup.html")
         else:
@@ -34,14 +41,14 @@ def signupfunct(request):
                 first_name=first_name,
                 username=username,
                 password=password,
-                mail=mail,
+                email=mail,
             )
             user.save()
             userd=user.id
             data=userdata(vendor=vendor, user_id=userd)
             data.save()
-            # data2 = trip(tripnumber="TRIP001",user_id=userd)
-            # data2.save()
+            data2 = orderno(ordernumber="PO001",user_id=userd)
+            data2.save()
             return redirect("loginpage")
 
 def loginfun(request):
@@ -52,7 +59,10 @@ def loginfun(request):
         if user is not None:
             auth.login(request,user)
             request.session['uid']=user.id
-            return redirect("land")
+            if(user.is_superuser==1):
+              return redirect("land")
+            else:
+              return redirect("customer")
            
         else:
             messages.info(request, "Invalid password or Password")
@@ -61,3 +71,23 @@ def loginfun(request):
 def logout(request):
     auth.logout(request)
     return redirect("loginpage")
+
+def addorder(request):
+    if request.method == "POST":
+        user=request.session['uid']
+        date=request.POST.get("date")
+        due=request.POST.get("date")
+        vendor=request.POST.get("vendor")
+        amount=request.POST.get("amount")
+        order=request.POST.get("order")
+        data = cpurchase(date=date,duedate=due,vendor=vendor,order=order,user_id=user,total=amount)
+        data.save()
+        user=request.session['uid']
+        ordern=orderno.objects.get(user_id=user)
+        ordernum=ordern.ordernumber
+        numeric_part = int(ordernum[2:])
+        numeric_part += 1
+        new_order_number = f'PO{numeric_part:03d}'
+        ordern.ordernumber=new_order_number
+        ordern.save()
+        return redirect("customer")
