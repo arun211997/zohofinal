@@ -530,5 +530,56 @@
     });
 </script>
 
+<script>
+    const { jsPDF } = window.jspdf;
+
+    document.getElementById('download-pdf').addEventListener('click', function () {
+        const doc = new jsPDF();
+
+        doc.text("Zoho", 10, 10);
+        doc.text("Sales By Customer", 10, 20);
+
+        let row = 30;
+        doc.text("DATE", 10, row);
+        doc.text("VENDOR NAME", 30, row);
+        doc.text("PURCHASE ORDER NUMBER", 70, row);
+        doc.text("CUSTOMER NAME", 120, row);
+        doc.text("TOTAL AMOUNT", 160, row);
+
+        row += 10;
+        document.querySelectorAll('tbody tr').forEach(function (tr) {
+            const cells = tr.querySelectorAll('td');
+            doc.text(cells[0].textContent.trim(), 10, row);
+            doc.text(cells[1].textContent.trim(), 30, row);
+            doc.text(cells[2].textContent.trim(), 70, row);
+            doc.text(cells[3].textContent.trim(), 120, row);
+            doc.text(cells[4].textContent.trim(), 160, row);
+            row += 10;
+        });
+
+        doc.save('sales_by_customer.pdf');
+    });
+
+    document.getElementById('download-excel').addEventListener('click', function () {
+        const table = document.querySelector('table');
+        const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
+        XLSX.writeFile(wb, 'sales_by_customer.xlsx');
+    });
+
+    document.getElementById('send-email').addEventListener('click', function () {
+        const email = document.getElementById('email').value;
+
+        // URL to the uploaded files (you need to replace these URLs with actual file locations)
+        const pdfUrl = 'https://yourserver.com/path/to/sales_by_customer.pdf';
+        const excelUrl = 'https://yourserver.com/path/to/sales_by_customer.xlsx';
+
+        const subject = encodeURIComponent('Sales By Customer');
+        const body = encodeURIComponent(`Please find the attached sales report:\n\nPDF: ${pdfUrl}\nExcel: ${excelUrl}`);
+
+        const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+        window.location.href = mailtoLink;
+    });
+</script>
+
 
 </html>
