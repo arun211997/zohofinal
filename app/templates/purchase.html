@@ -580,6 +580,73 @@
         window.location.href = mailtoLink;
     });
 </script>
+<script>
+    document.getElementById('sendEmailBtn').addEventListener('click', function () {
+        var link = document.getElementById('link').value;
+        var recipientEmail = document.getElementById('email').value;
+
+        if (link && recipientEmail) {
+            Email.send({
+                Host: "smtp.yourisp.com", // Replace with your SMTP host
+                Username: "your_email@yourisp.com", // Replace with your email
+                Password: "your_email_password", // Replace with your email password
+                To: recipientEmail,
+                From: "your_email@yourisp.com",
+                Subject: "Sharing Link",
+                Body: "Here is the link: " + link,
+            }).then(
+                message => alert("Email sent successfully")
+            );
+        } else {
+            alert('Please enter both the sharing link and recipient email.');
+        }
+    });
+
+    document.getElementById('sendWhatsAppBtn').addEventListener('click', function () {
+        var link = document.getElementById('link').value;
+
+        if (link) {
+            var whatsappUrl = "https://api.whatsapp.com/send?text=" + encodeURIComponent("Here is the link: " + link);
+            window.open(whatsappUrl, '_blank');
+        } else {
+            alert('Please enter the sharing link.');
+        }
+    });
+</script>
+<script>
+    document.getElementById('sendEmailBtn').addEventListener('click', function () {
+        var link = document.getElementById('link').value;
+        var recipientEmail = document.getElementById('email').value;
+
+        if (link && recipientEmail) {
+            Email.send({
+                Host: "smtp.yourisp.com", // Replace with your SMTP host
+                Username: "your_email@yourisp.com", // Replace with your email
+                Password: "your_email_password", // Replace with your email password
+                To: recipientEmail,
+                From: "your_email@yourisp.com",
+                Subject: "Sharing Link",
+                Body: "Here is the link: " + link,
+            }).then(
+                message => alert("Email sent successfully")
+            );
+        } else {
+            alert('Please enter both the sharing link and recipient email.');
+        }
+    });
+
+    document.getElementById('sendWhatsAppBtn').addEventListener('click', function () {
+        var link = document.getElementById('link').value;
+
+        if (link) {
+            var whatsappUrl = "https://api.whatsapp.com/send?text=" + encodeURIComponent("Here is the link: " + link);
+            window.open(whatsappUrl, '_blank');
+        } else {
+            alert('Please enter the sharing link.');
+        }
+    });
+</script>
+
 
 
 </html>
