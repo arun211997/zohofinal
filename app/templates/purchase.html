@@ -243,6 +243,16 @@
                         </div>
                     </div>
                 </div>
+            </div><br>
+            <div class="row">
+                <form method="POST" action="{%url 'datefilter' %}">
+                    {% csrf_token %}
+                    <!-- <label for="start-date">Start Date:</label> -->
+                    <input type="date" id="start-date" name="start_date">
+                    <!-- <label for="end-date">End Date:</label> -->
+                    <input type="date" id="end-date" name="end_date">
+                    <button type="submit">Run Report</button>
+                </form>
             </div>
         </div><br>
         <div class="container" id="bill">
@@ -253,6 +263,7 @@
                     style="justify-content: center;display: flex;color: #ffffff;border-style: solid; align-items: center; font-size: x-large; font-weight: 600;  border-left: 0;border-right: 0;border-top: 0;border-width: 0.1px;height: 45px;border-color: rgb(20, 23, 22, 0.2);">
                     Sales By customer</div>
             </div>
+
             <div class="table-responsive">
                 <table class="table  table-hover text-center table-striped">
                     <thead style="background-color: rgb(9, 74, 83); color: aliceblue;">

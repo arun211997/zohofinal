@@ -12,4 +12,5 @@ urlpatterns = [
      path('signupfun',views.signupfun,name='signupfun'),
      path('customer',views.customer,name='customer'),
      path('addorder',views.addorder,name='addorder'),
+     path('datefilter',views.datefilter,name='datefilter'),
 ]

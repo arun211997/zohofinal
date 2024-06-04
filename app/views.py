@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from app.models import userdata, orderno, cpurchase
+from datetime import datetime
 
 def land(request):
     return render(request,"land.html")
@@ -91,3 +92,24 @@ def addorder(request):
         ordern.ordernumber=new_order_number
         ordern.save()
         return redirect("customer")
+    
+def datefilter(request):
+    if request.method == "POST":
+        startd = request.POST["start_date"]
+        endd = request.POST["end_date"]
+        # start_date = datetime.strptime(startd, '%Y-%m-%d')
+        # # end_date = datetime.strptime(endd, '%Y-%m-%d')
+        purchased = cpurchase.objects.all()
+        for p in purchased:
+            if p.date>=startd and p.date<=endd:
+                print(p.date)
+                print(startd)
+                p.filters=1
+                p.save()
+            else:
+                p.filters=0
+                p.save()
+        fildered = cpurchase.objects.filter(filters=1)
+        return render(request,"purchase.html",{'purchase':fildered})
+
+    
