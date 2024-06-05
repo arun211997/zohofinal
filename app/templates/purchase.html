@@ -21,6 +21,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.0/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <title>zoho</title>
     <style>
         .navbar {
@@ -211,7 +213,7 @@
             <a href="#" class="w3-bar-item w3-button">Accounts payable <span class="dropdown-icon">&#9660;</span> </a>
         </div>
     </div>
-    <div class="container" style="margin-top: 96px;background-color:rgb(27, 26, 29);height: 550px;">
+    <div class="container" style="margin-top: 96px;background-color:rgb(27, 26, 29);height: max-content;">
         <div class="container">
             <div class="row" style="justify-content: space-between;">
                 <div style="margin-top: 20px;">
@@ -238,7 +240,7 @@
                                 style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 80px;margin-top: 5px;height: 30px">Export</button>
                         </div>
                         <div class="col-md-3">
-                            <button
+                            <button id="generate-link"
                                 style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 80px;margin-top: 5px;height: 30px">Share</button>
                         </div>
                     </div>
@@ -247,9 +249,9 @@
             <div class="row">
                 <form method="POST" action="{%url 'datefilter' %}">
                     {% csrf_token %}
-                    <!-- <label for="start-date">Start Date:</label> -->
+
                     <input type="date" id="start-date" name="start_date">
-                    <!-- <label for="end-date">End Date:</label> -->
+
                     <input type="date" id="end-date" name="end_date">
                     <button type="submit">Run Report</button>
                 </form>
@@ -316,67 +318,16 @@
                 </table>
             </div>
         </div>
-        <!-- <div class="row"
-            style="color: #151414;background-color: rgb(235, 230, 239);margin-left: 3px;margin-right: 3px;padding-top: 10px;">
-            <div class="col-md-3">
-                <div>
-                    <h6>Total Customers:</h6>
-                    <span>1</span>
-                </div>
-            </div>
-        </div>
-        <div class="row"
-            style="color: #151414;background-color: #f1f1f1;margin-left: 3px;margin-right: 3px;padding-top: 20px;padding-bottom: 10px;">
-            <div class="col-md-3">
-                <div>
-                    <h6>Invoice Sale:</h6>
-                    <span>Rs.1782</span>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div>
-                    <h6>Recurring Invoice:</h6>
-                    <span>Rs.2841</span>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div>
-                    <h6>Credit Note:</h6>
-                    <span>Rs.2921</span>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div>
-                    <h6 style="font-weight: bold;">Total:</h6>
-                    <span>Rs.1831</span>
-                </div>
 
-            </div>
-        </div>
-        <div class="row"
-            style="color: #151414;background-color: rgb(235, 230, 239);margin-left: 3px;margin-right: 3px;padding-top: 20px;padding-bottom: 10px;">
+    </div><br>
 
-            <div class="col-md-3">
-                <div>
-                    <h6>Sub Total:</h6>
-                    <span>Rs.2361</span>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div>
-                    <h6>Sub Total with credit note:</h6>
-                    <span>Rs.288</span>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div>
-                    <h6>Total Customers:</h6>
-                    <span>Rs.1091</span>
-                </div>
-            </div>
-        </div> -->
+    <div class="container">
+        <div class="row">
+            <button id="generate-pdf">Generate PDF</button>
+            <button id="share-whatsapp" style="display: none;">Share via WhatsApp</button>
+            <button id="share-email" style="display: none;">Share via Email</button>
+        </div>
     </div>
-
 
     <footer class="footer">
         <div class="container" style="justify-content: center;align-items: center;display: flex;">
@@ -517,7 +468,6 @@
             });
         }
     });
-    window.onload = billtotal;
 </script>
 
 <script>
@@ -542,122 +492,128 @@
 </script>
 
 <script>
-    const { jsPDF } = window.jspdf;
+    document.getElementById('generate-link').addEventListener('click', function () {
+        // HTML content as a string
+        const htmlContent = `
+            <div class="container" id="bill">
+                <div class="row" style="background-color: rgb(0, 102, 255);margin-left: 0.4px;margin-right: 0.4px;">
+                    <h4 class="text-center" style="color: #e9e9e9;margin-top: 20px;margin-bottom: -5px;font-size: medium;">zoho</h4>
+                    <div class="col-md-12" style="justify-content: center;display: flex;color: #ffffff;border-style: solid; align-items: center; font-size: x-large; font-weight: 600;  border-left: 0;border-right: 0;border-top: 0;border-width: 0.1px;height: 45px;border-color: rgb(20, 23, 22, 0.2);">
+                        Sales By customer
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover text-center table-striped">
+                        <thead style="background-color: rgb(9, 74, 83); color: aliceblue;">
+                            <tr>
+                                <th>DATE</th>
+                                <th>
+                                    <center>
+                                        <div style="width: max-content;">VENDORNAME</div>
+                                    </center>
+                                </th>
+                                <th>
+                                    <center>
+                                        <div style="width: max-content;">PURCHASE ORDER NUMBER</div>
+                                    </center>
+                                </th>
+                                <th>CUSTOMERNAME</th>
+                                <th>
+                                    <center>
+                                        <div style="width: max-content;">TOTAL AMOUNT</div>
+                                    </center>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody style="background-color: rgb(28, 35, 40);">
+                            {% for p in purchase %}
+                            <tr style="color: aliceblue;">
+                                <td>
+                                    <center>
+                                        <div style="width: max-content;">{{ p.date }}</div>
+                                    </center>
+                                </td>
+                                <td>{{ p.vendor }}</td>
+                                <td>{{ p.order }}</td>
+                                <td>{{ p.user.first_name }}</td>
+                                <td>₹ {{ p.total }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
 
-    document.getElementById('download-pdf').addEventListener('click', function () {
-        const doc = new jsPDF();
+        // Create a Blob from the HTML content
+        const blob = new Blob([htmlContent], { type: 'text/html' });
 
-        doc.text("Zoho", 10, 10);
-        doc.text("Sales By Customer", 10, 20);
+        // Generate a URL for the Blob
+        const url = URL.createObjectURL(blob);
 
-        let row = 30;
-        doc.text("DATE", 10, row);
-        doc.text("VENDOR NAME", 30, row);
-        doc.text("PURCHASE ORDER NUMBER", 70, row);
-        doc.text("CUSTOMER NAME", 120, row);
-        doc.text("TOTAL AMOUNT", 160, row);
+        // Optionally upload this blob to a server or cloud storage and get a shareable link
+        // For simplicity, we'll use the Blob URL directly here
 
-        row += 10;
-        document.querySelectorAll('tbody tr').forEach(function (tr) {
-            const cells = tr.querySelectorAll('td');
-            doc.text(cells[0].textContent.trim(), 10, row);
-            doc.text(cells[1].textContent.trim(), 30, row);
-            doc.text(cells[2].textContent.trim(), 70, row);
-            doc.text(cells[3].textContent.trim(), 120, row);
-            doc.text(cells[4].textContent.trim(), 160, row);
-            row += 10;
+        // Show sharing buttons
+        document.getElementById('share-whatsapp').style.display = 'inline';
+        document.getElementById('share-email').style.display = 'inline';
+
+        // Add event listeners for sharing
+        document.getElementById('share-whatsapp').addEventListener('click', function () {
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent('Check out this report: ' + url)}`;
+            window.open(whatsappUrl, '_blank');
         });
 
-        doc.save('sales_by_customer.pdf');
-    });
-
-    document.getElementById('download-excel').addEventListener('click', function () {
-        const table = document.querySelector('table');
-        const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
-        XLSX.writeFile(wb, 'sales_by_customer.xlsx');
-    });
-
-    document.getElementById('send-email').addEventListener('click', function () {
-        const email = document.getElementById('email').value;
-
-        // URL to the uploaded files (you need to replace these URLs with actual file locations)
-        const pdfUrl = 'https://yourserver.com/path/to/sales_by_customer.pdf';
-        const excelUrl = 'https://yourserver.com/path/to/sales_by_customer.xlsx';
-
-        const subject = encodeURIComponent('Sales By Customer');
-        const body = encodeURIComponent(`Please find the attached sales report:\n\nPDF: ${pdfUrl}\nExcel: ${excelUrl}`);
-
-        const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
-        window.location.href = mailtoLink;
+        document.getElementById('share-email').addEventListener('click', function () {
+            const emailSubject = 'Sales By Customer Report';
+            const emailBody = `Please find the sales report at the following link: ${url}`;
+            const mailtoUrl = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+            window.open(mailtoUrl, '_self');
+        });
     });
 </script>
+
 <script>
-    document.getElementById('sendEmailBtn').addEventListener('click', function () {
-        var link = document.getElementById('link').value;
-        var recipientEmail = document.getElementById('email').value;
+    document.getElementById('generate-pdf').addEventListener('click', async function () {
+        const { jsPDF } = window.jspdf;
 
-        if (link && recipientEmail) {
-            Email.send({
-                Host: "smtp.yourisp.com", // Replace with your SMTP host
-                Username: "your_email@yourisp.com", // Replace with your email
-                Password: "your_email_password", // Replace with your email password
-                To: recipientEmail,
-                From: "your_email@yourisp.com",
-                Subject: "Sharing Link",
-                Body: "Here is the link: " + link,
-            }).then(
-                message => alert("Email sent successfully")
-            );
-        } else {
-            alert('Please enter both the sharing link and recipient email.');
-        }
-    });
+        // Capture the content of the div with id="bill"
+        const element = document.getElementById('bill');
+        const canvas = await html2canvas(element);
+        const imgData = canvas.toDataURL('image/png');
 
-    document.getElementById('sendWhatsAppBtn').addEventListener('click', function () {
-        var link = document.getElementById('link').value;
+        // Create a new jsPDF instance
+        const pdf = new jsPDF();
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-        if (link) {
-            var whatsappUrl = "https://api.whatsapp.com/send?text=" + encodeURIComponent("Here is the link: " + link);
+        // Add the captured image to the PDF
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+        // Save the PDF as a Blob
+        const pdfBlob = pdf.output('blob');
+
+        // Generate a URL for the Blob
+        const url = URL.createObjectURL(pdfBlob);
+
+        // Show sharing buttons
+        document.getElementById('share-whatsapp').style.display = 'inline';
+        document.getElementById('share-email').style.display = 'inline';
+
+        // Add event listeners for sharing
+        document.getElementById('share-whatsapp').addEventListener('click', function () {
+            const whatsappUrl = `https://web.whatsapp.com/send?text=${encodeURIComponent(url)}`;
             window.open(whatsappUrl, '_blank');
-        } else {
-            alert('Please enter the sharing link.');
-        }
+        });
+
+        document.getElementById('share-email').addEventListener('click', function () {
+            const emailSubject = 'Sales By Customer Report';
+            const emailBody = `Please find the sales report at the following link: ${url}`;
+            const mailtoUrl = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+            window.open(mailtoUrl, '_self');
+        });
     });
 </script>
-<script>
-    document.getElementById('sendEmailBtn').addEventListener('click', function () {
-        var link = document.getElementById('link').value;
-        var recipientEmail = document.getElementById('email').value;
-
-        if (link && recipientEmail) {
-            Email.send({
-                Host: "smtp.yourisp.com", // Replace with your SMTP host
-                Username: "your_email@yourisp.com", // Replace with your email
-                Password: "your_email_password", // Replace with your email password
-                To: recipientEmail,
-                From: "your_email@yourisp.com",
-                Subject: "Sharing Link",
-                Body: "Here is the link: " + link,
-            }).then(
-                message => alert("Email sent successfully")
-            );
-        } else {
-            alert('Please enter both the sharing link and recipient email.');
-        }
-    });
-
-    document.getElementById('sendWhatsAppBtn').addEventListener('click', function () {
-        var link = document.getElementById('link').value;
-
-        if (link) {
-            var whatsappUrl = "https://api.whatsapp.com/send?text=" + encodeURIComponent("Here is the link: " + link);
-            window.open(whatsappUrl, '_blank');
-        } else {
-            alert('Please enter the sharing link.');
-        }
-    });
-</script>
-
-
 
 </html>
