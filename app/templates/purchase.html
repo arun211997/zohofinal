@@ -67,6 +67,13 @@
             /* Initially hidden */
         }
 
+        .popup-menu {
+            display: none;
+            position: absolute;
+            /* background: rgb(2, 57, 80);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+        }
+
         .w3-sidebar a {
             padding: 10px 15px;
             text-decoration: none;
@@ -240,25 +247,34 @@
                                 style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 80px;margin-top: 5px;height: 30px">Export</button>
                         </div>
                         <div class="col-md-3">
-                            <button id="generate-link"
+                            <button id="generate-pdf"
                                 style="background-color: rgb(2, 57, 80);border: none;border-radius: 3px;outline: none;color: #f1f1f1;font-size: medium;width: 80px;margin-top: 5px;height: 30px">Share</button>
                         </div>
                     </div>
                 </div>
             </div><br>
             <div class="row">
-                <form method="POST" action="{%url 'datefilter' %}">
-                    {% csrf_token %}
+                <div class="col-md-6">
+                    <form method="POST" action="{%url 'datefilter' %}">
+                        {% csrf_token %}
 
-                    <input type="date" id="start-date" name="start_date">
+                        <input type="date" id="start-date" name="start_date">
 
-                    <input type="date" id="end-date" name="end_date">
-                    <button type="submit">Run Report</button>
-                </form>
+                        <input type="date" id="end-date" name="end_date">
+                        <button type="submit">Run Report</button>
+                    </form>
+                </div>
+                <div class="col-md-6" style="display: flex;justify-content: right;">
+                    <div id="popup-menu" class="popup-menu" style="background-color: rgb(51, 71, 64);">
+                        <button id="share-whatsapp" style="background-color:rgb(2, 57, 80);color: #f1f1f1;" >Share via WhatsApp</button>
+                        <button id="share-email" style="background-color:rgb(2, 57, 80);color: #f1f1f1;" >Share via Email</button>
+                        <button id="close" style="background-color:rgb(197, 54, 19);color: #f1f1f1;" >X</button>
+                    </div>
+                </div>
             </div>
         </div><br>
         <div class="container" id="bill">
-            <div class="row" style="background-color: rgb(0, 102, 255);margin-left: 0.4px;margin-right: 0.4px;">
+            <div class="row" style="background-color: rgb(0, 102, 255);margin-left: 0.3px;margin-right: 0.3px;">
                 <h4 class="text-center" style="color: #e9e9e9;margin-top: 20px;margin-bottom: -5px;font-size: medium;">
                     zoho</h4>
                 <div class="col-md-12"
@@ -271,23 +287,32 @@
                     <thead style="background-color: rgb(9, 74, 83); color: aliceblue;">
                         <tr>
                             <th>
+                                STATUS
+                            </th>
+                            <th>
                                 DATE
                             </th>
                             <th>
                                 <center>
                                     <div style="width: max-content;">
-                                        VENDORNAME
+                                        DUE DATE
                                     </div>
                                 </center>
                             </th>
                             <th>
                                 <center>
                                     <div style="width: max-content;">
-                                        PURCHASE ORDER NUMBER
+                                        PURCHASE ORDER NO
                                     </div>
                                 </center>
                             </th>
-                            <th>CUSTOMERNAME</th>
+                            <th>
+                                <center>
+                                    <div style="width: max-content;">
+                                        VENDOR NAME
+                                    </div>
+                                </center>
+                            </th>
                             <th>
                                 <center>
                                     <div style="width: max-content;">
@@ -304,13 +329,32 @@
                             <td>
                                 <center>
                                     <div style="width: max-content;">
+                                        {{p.status}}
+                                    </div>
+                                </center>
+                            </td>
+                            <td>
+                                <center>
+                                    <div style="width: max-content;">
                                         {{p.date}}
                                     </div>
                                 </center>
                             </td>
-                            <td>{{p.vendor}}</td>
+                            <td>
+                                <center>
+                                    <div style="width: max-content;">
+                                        {{p.duedate}}
+                                    </div>
+                                </center>
+                            </td>
                             <td>{{p.order}}</td>
-                            <td>{{p.user.first_name}}</td>
+                            <td>
+                                <center>
+                                    <div>
+                                        {{p.vendor}}
+                                    </div>
+                                </center>
+                            </td>
                             <td>₹ {{p.total}}</td>
                         </tr>
                     </tbody>
@@ -322,10 +366,10 @@
     </div><br>
 
     <div class="container">
-        <div class="row">
-            <button id="generate-pdf">Generate PDF</button>
-            <button id="share-whatsapp" style="display: none;">Share via WhatsApp</button>
-            <button id="share-email" style="display: none;">Share via Email</button>
+        <div id="popup-menu" class="popup-menu">
+            <button id="share-whatsapp">Share via WhatsApp</button>
+            <button id="share-email">Share via Email</button>
+            <button id="close">close</button>
         </div>
     </div>
 
@@ -491,87 +535,7 @@
     });
 </script>
 
-<script>
-    document.getElementById('generate-link').addEventListener('click', function () {
-        // HTML content as a string
-        const htmlContent = `
-            <div class="container" id="bill">
-                <div class="row" style="background-color: rgb(0, 102, 255);margin-left: 0.4px;margin-right: 0.4px;">
-                    <h4 class="text-center" style="color: #e9e9e9;margin-top: 20px;margin-bottom: -5px;font-size: medium;">zoho</h4>
-                    <div class="col-md-12" style="justify-content: center;display: flex;color: #ffffff;border-style: solid; align-items: center; font-size: x-large; font-weight: 600;  border-left: 0;border-right: 0;border-top: 0;border-width: 0.1px;height: 45px;border-color: rgb(20, 23, 22, 0.2);">
-                        Sales By customer
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover text-center table-striped">
-                        <thead style="background-color: rgb(9, 74, 83); color: aliceblue;">
-                            <tr>
-                                <th>DATE</th>
-                                <th>
-                                    <center>
-                                        <div style="width: max-content;">VENDORNAME</div>
-                                    </center>
-                                </th>
-                                <th>
-                                    <center>
-                                        <div style="width: max-content;">PURCHASE ORDER NUMBER</div>
-                                    </center>
-                                </th>
-                                <th>CUSTOMERNAME</th>
-                                <th>
-                                    <center>
-                                        <div style="width: max-content;">TOTAL AMOUNT</div>
-                                    </center>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody style="background-color: rgb(28, 35, 40);">
-                            {% for p in purchase %}
-                            <tr style="color: aliceblue;">
-                                <td>
-                                    <center>
-                                        <div style="width: max-content;">{{ p.date }}</div>
-                                    </center>
-                                </td>
-                                <td>{{ p.vendor }}</td>
-                                <td>{{ p.order }}</td>
-                                <td>{{ p.user.first_name }}</td>
-                                <td>₹ {{ p.total }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        `;
 
-        // Create a Blob from the HTML content
-        const blob = new Blob([htmlContent], { type: 'text/html' });
-
-        // Generate a URL for the Blob
-        const url = URL.createObjectURL(blob);
-
-        // Optionally upload this blob to a server or cloud storage and get a shareable link
-        // For simplicity, we'll use the Blob URL directly here
-
-        // Show sharing buttons
-        document.getElementById('share-whatsapp').style.display = 'inline';
-        document.getElementById('share-email').style.display = 'inline';
-
-        // Add event listeners for sharing
-        document.getElementById('share-whatsapp').addEventListener('click', function () {
-            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent('Check out this report: ' + url)}`;
-            window.open(whatsappUrl, '_blank');
-        });
-
-        document.getElementById('share-email').addEventListener('click', function () {
-            const emailSubject = 'Sales By Customer Report';
-            const emailBody = `Please find the sales report at the following link: ${url}`;
-            const mailtoUrl = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-            window.open(mailtoUrl, '_self');
-        });
-    });
-</script>
 
 <script>
     document.getElementById('generate-pdf').addEventListener('click', async function () {
@@ -614,6 +578,17 @@
             window.open(mailtoUrl, '_self');
         });
     });
+</script>
+<script>
+    document.getElementById('generate-pdf').addEventListener('click', function () {
+        var popupMenu = document.getElementById('popup-menu');
+        popupMenu.style.display = 'block';
+    });
+    document.getElementById('close').addEventListener('click', function () {
+        var popupMenu = document.getElementById('popup-menu');
+        popupMenu.style.display = 'none';
+    });
+    
 </script>
 
 </html>

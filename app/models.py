@@ -5,6 +5,7 @@ user= get_user_model ()
 class cpurchase(models.Model):
     user=models.ForeignKey(user,on_delete=models.CASCADE,null=True)
     date=models.TextField(null=True)
+    status=models.TextField(null=True)
     duedate=models.TextField(null=True)
     order=models.TextField(null=True)
     vendor=models.TextField(null=True)
