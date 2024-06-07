@@ -4,6 +4,7 @@ from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from app.models import userdata, orderno, cpurchase
 from datetime import datetime
+from django.db.models import Q
 
 def land(request):
     return render(request,"land.html")
@@ -81,7 +82,8 @@ def addorder(request):
         vendor=request.POST.get("vendor")
         amount=request.POST.get("amount")
         order=request.POST.get("order")
-        data = cpurchase(date=date,duedate=due,vendor=vendor,order=order,user_id=user,total=amount)
+        select=request.POST.get("select")
+        data = cpurchase(date=date,duedate=due,vendor=vendor,order=order,user_id=user,total=amount,status=select,filters=0,Sfilters=0)
         data.save()
         user=request.session['uid']
         ordern=orderno.objects.get(user_id=user)
@@ -97,19 +99,34 @@ def datefilter(request):
     if request.method == "POST":
         startd = request.POST["start_date"]
         endd = request.POST["end_date"]
-        # start_date = datetime.strptime(startd, '%Y-%m-%d')
-        # # end_date = datetime.strptime(endd, '%Y-%m-%d')
+        select = request.POST.get("select")
         purchased = cpurchase.objects.all()
         for p in purchased:
-            if p.date>=startd and p.date<=endd:
-                print(p.date)
-                print(startd)
-                p.filters=1
-                p.save()
-            else:
-                p.filters=0
-                p.save()
-        fildered = cpurchase.objects.filter(filters=1)
+            p.filters=0
+            p.Sfilters=0
+            p.save()
+
+        if select is not None:
+            for p in purchased:
+                if p.status==select:
+                    p.Sfilters=1
+                    p.save()
+                else:
+                    p.Sfilters=0
+                    p.save()
+
+        purchased = cpurchase.objects.all()
+        if startd:
+            for p in purchased:
+                if p.date>=startd and p.date<=endd:
+                    print(p.date)
+                    print(startd)
+                    p.filters=1
+                    p.save()
+                else:
+                    p.filters=0
+                    p.save()
+        fildered = cpurchase.objects.filter(filters=1 ,Sfilters=1)
         return render(request,"purchase.html",{'purchase':fildered})
 
     

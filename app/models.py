@@ -11,6 +11,7 @@ class cpurchase(models.Model):
     vendor=models.TextField(null=True)
     total=models.TextField(null=True)
     filters=models.TextField(null=True)
+    Sfilters=models.TextField(null=True)
 
 class userdata(models.Model):
     user=models.ForeignKey(user,on_delete=models.CASCADE,null=True)

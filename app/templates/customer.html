@@ -181,7 +181,7 @@
             </div>
         </div>
     </nav>
-    <div class="container" style="margin-top: 96px;background-color:rgb(27, 26, 29);height: 400px;">
+    <div class="container" style="margin-top: 96px;background-color:rgb(27, 26, 29);height: max-content;">
         <div class="container">
             <div class="row" style="justify-content: space-between;">
                 <div style="margin-top: 20px;">
@@ -209,6 +209,15 @@
                                 <input class="form-control" type="text" id="vendor" name="vendor" required
                                     placeholder="Vendor Name">
                             </div>
+                            <div>
+                                <select name="select" id="select" required>
+                                    <option value="" disabled selected>Select Status</option>
+                                    <option name="category">RECURRING BILL</option>
+                                    <option name="category">BILL</option>
+                                    <option name="category">SAVE</option>
+                                    <option name="category">DRAFT</option>
+                                </select>
+                            </div><br>
 
                             <div class="form-group">
                                 <input class="form-control" type="text" id="amount" name="amount" required
